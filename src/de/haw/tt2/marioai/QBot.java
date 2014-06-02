@@ -9,6 +9,10 @@ import ch.idsia.benchmark.tasks.LearningTask;
  * Created by dude on 02.06.2014.
  */
 public class QBot extends BasicMarioAIAgent implements LearningAgent {
+    public QBot(String s) {
+        super(s);
+    }
+
     @Override
     public void learn() {
 
