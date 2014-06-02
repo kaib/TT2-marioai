@@ -34,7 +34,7 @@ public class Params {
 
 
     public static final int OBSERVATION_LEVELS = 2;
-    public static final int[] OBSERVATION_SIZES = {3,5};
+    public static final int[] OBSERVATION_SIZES = {1,3};
 
     public static final float[] ENEMIES_DISTANCE_REWARD_SCALER = {0f,0f,0.15f};
     //TODO Rewards anpassen
