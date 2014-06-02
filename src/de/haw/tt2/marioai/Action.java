@@ -37,4 +37,19 @@ public enum Action {
            this.action[key] = true;
        }
     }
+
+    public boolean[] getAction() {
+        return action;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public static boolean[] getAction(int number){
+        return Action.values()[number].getAction();
+    }
+
+
+
 }
