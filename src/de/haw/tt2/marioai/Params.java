@@ -8,6 +8,7 @@ public class Params {
     //MARIO AI Specific Variables
 
     public static int TRAINING_ITERATIONS = 1000;
+    public static int MARIO_MODE = 2;
 
     public static int SEED = 0;
     public static int EVAL_SEED = 0;
@@ -19,11 +20,11 @@ public class Params {
     //Q-Learning Parameters
     //Presents the Number of possible Actions per QState -> Number of Colls in QTable
     public static final int NUMBER_OF_ACTIONS = 12;
-    public static final float EXPLORATION_RATE = 0.2f;
+    public static final float EXPLORATION_RATE = 0.3f;
 
     // Gamma: [0,1] Je näher an der 1, desto eher wird die Langzeitbelohnung optimiert
     //              Gamma = 0 => Optimierung der sofortigen Belohnung
-    public static final float GAMMA = 0.8f;
+    public static final float GAMMA = 0.6f;
 
     //Gibt an inwieweit zukünftige Belohnungen das bisher gelernte beeinflussen
     //LEARNING_RATE = 1 => Alles bisher gelernte wird komplett überschrieben
@@ -31,9 +32,10 @@ public class Params {
     public static float LEARNING_RATE = 0.8f;
 
     //TODO Stuck state?
-
+    public static final int MIN_STUCK_FRAMES = 25;
 
     public static final float DIRECTION_THRESHOLD = 0.8f;
+    public static final float DISTANCE_THRESHOLD = 2;
 
     public static final int OBSERVATION_LEVELS = 2;
     public static final int[] OBSERVATION_SIZES = {1,3};
@@ -44,14 +46,14 @@ public class Params {
     //Struct like Class for Reward Params:
 
     public static final class REWARDS {
-        public static final int DISTANCE = 50;
-        public static final int HEIGHT = 50;
+        public static final int DISTANCE = 2;
+        public static final int HEIGHT = 5;
         public static final int COLLISION = -800;
         public static final int KILLED_BY_FIRE = 10;
         public static final int KILLED_BY_STOMP = 10;
         public static final int TIME_SPENT= -10;
+        public static final int STUCK = -10;
 
-        public static final int STUCK = 0;
         public static final int WIN = 0;
         public static final int MODE = 0;
         public static final int COINS = 0;

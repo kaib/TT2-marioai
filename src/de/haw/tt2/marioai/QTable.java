@@ -12,11 +12,11 @@ public class QTable {
     //TODO STATE CODING
     private HashMap<State, float[]> qTable;
 
-    int actionCount;
+    private int actionCount;
 
-    float explorationRate= Params.EXPLORATION_RATE;
-    float gamma = Params.GAMMA;
-    float learningRate = Params.LEARNING_RATE;
+    private float explorationRate= Params.EXPLORATION_RATE;
+    private float gamma = Params.GAMMA;
+    private float learningRate = Params.LEARNING_RATE;
 
     //QLearning updates QValue one step back, we need the prevState and prevAction
     State prevState;
@@ -98,5 +98,9 @@ public class QTable {
 
     public HashMap<State, float[]> getqTable() {
         return qTable;
+    }
+
+    public void setExplorationRate(float explorationRate) {
+        this.explorationRate = explorationRate;
     }
 }

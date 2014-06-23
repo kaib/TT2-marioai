@@ -11,6 +11,7 @@ import java.util.logging.Logger;
  */
 public class State {
     Logger logger = Logger.getLogger("MarioState");
+
     private static final int MARIO_X = 9;
     private static final int MARIO_Y = 9;
 
@@ -21,6 +22,8 @@ public class State {
     private float marioX = 0f;
     private float marioY = 0f;
 
+    private int stuckCounter = 0;
+    private int stuck = 0;
     private int onGround = 1;
     private int canJump = 1;
 
@@ -68,6 +71,7 @@ public class State {
 
         //Update Distance Delta  // TODO Implement with minValue
         distance = environment.getEvaluationInfo().distancePassedPhys - lastDistance;
+        if(distance < Params.DISTANCE_THRESHOLD) {distance = 0;}
         lastDistance = environment.getEvaluationInfo().distancePassedPhys;
         //todo Height
         height = Math.max(0, Math.max(0,getDistanceToGround(MARIO_X-1)-getDistanceToGround(MARIO_X))-lastHeight);
@@ -81,6 +85,15 @@ public class State {
         marioX = pos[0];
         marioY = pos[1];
 
+        if(distance == 0) {
+            stuckCounter++;
+        }else {
+            stuckCounter = 0;
+            stuck = 0;
+        }
+        if(stuckCounter >= Params.MIN_STUCK_FRAMES){
+            stuck = 1;
+        }
         //Stuck??
 
         gotHit = environment.getEvaluationInfo().collisionsWithCreatures - hitCount;
@@ -96,7 +109,8 @@ public class State {
         int enemyIndize=0;
         totalEnemyCount = 0;
         for(int x = MARIO_X -2; x <= MARIO_X+2;x++){
-            for(int y = MARIO_Y -3; x <= MARIO_Y+1; y++){
+            for(int y = MARIO_Y -3; y <= MARIO_Y+1; y++){
+                //  System.out.println("[" + x + ":" +y+"]");
                if(scene[y][x] == Sprite.KIND_BULLET_BILL ||
                   scene[y][x] == Sprite.KIND_GOOMBA ||
                   scene[y][x] == Sprite.KIND_ENEMY_FLOWER ||
@@ -119,6 +133,7 @@ public class State {
        obstacles = new boolean[4];
        int obstacleIndize = 0;
        for(int y = MARIO_Y-2; y <= MARIO_Y +1; y++){
+        //   y = (y < 0)?0:y;
            if(isObstacle(MARIO_X + 1, y)){
                obstacles[obstacleIndize] = true;
            }
@@ -129,10 +144,10 @@ public class State {
     public float getReward(){
         float reward =  distance * Params.REWARDS.DISTANCE +
                 height * Params.REWARDS.HEIGHT +
-                time * Params.REWARDS.TIME_SPENT +
-                enemiesKilledByFire * Params.REWARDS.KILLED_BY_FIRE +
-                enemiesKilledByStomp * Params.REWARDS.KILLED_BY_SHELL;
-                logger.info("D: " + distance + " H:" + height + " R:" +reward);
+
+                stuck * Params.REWARDS.STUCK;
+      //  time * Params.REWARDS.TIME_SPENT +
+               logger.info("D: " + distance + " H:" + height + " R:" +reward);
         return reward;
     }
 
