@@ -41,6 +41,10 @@ public class QTable {
 
     public int getBestAction(State state){
         float[] qValues = getQValues(state);
+        if(qValues == null) {
+            System.err.println("No Q Values Defined for this state");
+        }
+
         float maxQ = Float.NEGATIVE_INFINITY;
         int qIndex = 0;
         for(int i = 0; i < qValues.length; i++) {

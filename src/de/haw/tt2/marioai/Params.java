@@ -7,7 +7,7 @@ public class Params {
 
     //MARIO AI Specific Variables
 
-    public static int ITERATIONS = 1000;
+    public static int TRAINING_ITERATIONS = 1000;
 
     public static int SEED = 0;
     public static int EVAL_SEED = 0;
@@ -33,6 +33,8 @@ public class Params {
     //TODO Stuck state?
 
 
+    public static final float DIRECTION_THRESHOLD = 0.8f;
+
     public static final int OBSERVATION_LEVELS = 2;
     public static final int[] OBSERVATION_SIZES = {1,3};
 
@@ -42,24 +44,24 @@ public class Params {
     //Struct like Class for Reward Params:
 
     public static final class REWARDS {
-        public static final int distance = 50;
-        public static final int height = 50;
-        public static final int collision = -800;
-        public static final int killedByFire = 10;
-        public static final int killedByStomp = 10;
+        public static final int DISTANCE = 50;
+        public static final int HEIGHT = 50;
+        public static final int COLLISION = -800;
+        public static final int KILLED_BY_FIRE = 10;
+        public static final int KILLED_BY_STOMP = 10;
+        public static final int TIME_SPENT= -10;
 
-        public static final int stuck = 0;
-        public static final int win = 0;
-        public static final int mode = 0;
-        public static final int coins = 0;
-        public static final int flowerFire = 0;
-        public static final int kills = 0;
-        public static final int killedByShell = 0;
-        public static final int mushroom = 0;
-        public static final int timeLeft = 0;
-        public static final int hiddenBlock = 0;
-        public static final int greenMushroom = 0;
-        public static final int stomp = 0;
+        public static final int STUCK = 0;
+        public static final int WIN = 0;
+        public static final int MODE = 0;
+        public static final int COINS = 0;
+        public static final int FLOWER_FIRE = 0;
+        public static final int KILLS = 0;
+        public static final int KILLED_BY_SHELL = 0;
+        public static final int MUSHROOM = 0;
+        public static final int HIDDEN_BLOCK = 0;
+        public static final int GREEN_MUSHROOM = 0;
+        public static final int STOMP = 0;
 
     }
 
