@@ -2,7 +2,6 @@ package de.haw.tt2.marioai;
 
 import ch.idsia.agents.Agent;
 import ch.idsia.agents.LearningAgent;
-import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 import ch.idsia.benchmark.tasks.LearningTask;
 import ch.idsia.tools.EvaluationInfo;
@@ -55,6 +54,7 @@ public class QBot implements LearningAgent {
     public void integrateObservation(Environment environment) {
         //Observagtion after the Action => Info on prevState x prevAction -> currentAction, reward for prevAction
         currentState.update(environment);
+        currentPhase = Phase.LEARN;
         if(currentPhase == Phase.INIT && environment.isMarioOnGround()) {
            // logger.info("Marion on ground, start learning now");
             currentPhase = Phase.LEARN;
@@ -85,8 +85,9 @@ public class QBot implements LearningAgent {
         int score = evaluationInfo.computeWeightedFitness();
 
        // logger.info("SCORE: " + score);
-        logger.info("EndLearningTrial: " + learningTrial + " Score: " + score);
+        logger.info("EndLearningTrial: " + learningTrial + " Score: " + score + " QT Size: " + qTable.getqTable().size());
         learningTrial++;
+
     }
 
     private void eval(){
@@ -163,5 +164,9 @@ public class QBot implements LearningAgent {
                 ", marioAIOptions=" + marioAIOptions +
                 ", learningTask=" + learningTask +
                 '}';
+    }
+
+    public QTable getqTable() {
+        return qTable;
     }
 }

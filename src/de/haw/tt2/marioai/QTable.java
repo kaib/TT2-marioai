@@ -85,15 +85,20 @@ public class QTable {
         if(!qTable.containsKey(state)) {
             float[] initQValues = getInitQValues();
             qTable.put(state,initQValues);
-            return initQValues;
         }
-
         return qTable.get(state);
     }
 
     //Currently Default QValues are 0
     private float[] getInitQValues() {
-        return new float[actionCount];
+        float maxF = 0.1f;
+        float minF = -0.1f;
+
+        float[] result = new float[actionCount];
+        for(int i = 0; i < result.length; i++){
+            result[i] = random.nextFloat() * (maxF-minF) +minF;
+        }
+        return result;
     }
 
     public HashMap<State, float[]> getqTable() {
@@ -102,5 +107,16 @@ public class QTable {
 
     public void setExplorationRate(float explorationRate) {
         this.explorationRate = explorationRate;
+    }
+
+    @Override
+    public String toString() {
+        return "QTable{" +
+                "qTable=" + qTable +
+                ", actionCount=" + actionCount +
+                ", explorationRate=" + explorationRate +
+                ", gamma=" + gamma +
+                ", learningRate=" + learningRate +
+                '}';
     }
 }

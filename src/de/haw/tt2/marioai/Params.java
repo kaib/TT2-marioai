@@ -15,12 +15,12 @@ public class Params {
 
     public static int EVAL_ITERATIONS = 10;
 
-    public static final float EVAL_EXPLORATION_RATE = 0.01f;
+    public static final float EVAL_EXPLORATION_RATE = 0.001f;
 
     //Q-Learning Parameters
     //Presents the Number of possible Actions per QState -> Number of Colls in QTable
     public static final int NUMBER_OF_ACTIONS = 12;
-    public static final float EXPLORATION_RATE = 0.3f;
+    public static final float EXPLORATION_RATE = 0.1f;
 
     // Gamma: [0,1] Je näher an der 1, desto eher wird die Langzeitbelohnung optimiert
     //              Gamma = 0 => Optimierung der sofortigen Belohnung
@@ -46,8 +46,8 @@ public class Params {
     //Struct like Class for Reward Params:
 
     public static final class REWARDS {
-        public static final int DISTANCE = 2;
-        public static final int HEIGHT = 5;
+        public static final int DISTANCE = 5;
+        public static final int HEIGHT = 2;
         public static final int COLLISION = -800;
         public static final int KILLED_BY_FIRE = 10;
         public static final int KILLED_BY_STOMP = 10;

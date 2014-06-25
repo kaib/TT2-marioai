@@ -15,23 +15,211 @@ public class State {
     private static final int MARIO_X = 9;
     private static final int MARIO_Y = 9;
 
-    //2-fire 1-big 0-small
-    private int marioMode = 2;
-    //direction 0-8
+    public int getMarioMode() {
+        return marioMode;
+    }
+
+    public void setMarioMode(int marioMode) {
+        this.marioMode = marioMode;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public float getMarioX() {
+        return marioX;
+    }
+
+    public void setMarioX(float marioX) {
+        this.marioX = marioX;
+    }
+
+    public float getMarioY() {
+        return marioY;
+    }
+
+    public void setMarioY(float marioY) {
+        this.marioY = marioY;
+    }
+
+    public int getStuckCounter() {
+        return stuckCounter;
+    }
+
+    public void setStuckCounter(int stuckCounter) {
+        this.stuckCounter = stuckCounter;
+    }
+
+    public int getOnGround() {
+        return onGround;
+    }
+
+    public void setOnGround(int onGround) {
+        this.onGround = onGround;
+    }
+
+    public int getStuck() {
+        return stuck;
+    }
+
+    public void setStuck(int stuck) {
+        this.stuck = stuck;
+    }
+
+    public int getCanJump() {
+        return canJump;
+    }
+
+    public void setCanJump(int canJump) {
+        this.canJump = canJump;
+    }
+
+    public int getGotHit() {
+        return gotHit;
+    }
+
+    public void setGotHit(int gotHit) {
+        this.gotHit = gotHit;
+    }
+
+    public int getHitCount() {
+        return hitCount;
+    }
+
+    public void setHitCount(int hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getEnemiesKilledByStomp() {
+        return enemiesKilledByStomp;
+    }
+
+    public void setEnemiesKilledByStomp(int enemiesKilledByStomp) {
+        this.enemiesKilledByStomp = enemiesKilledByStomp;
+    }
+
+    public boolean[] getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(boolean[] enemies) {
+        this.enemies = enemies;
+    }
+
+    public int getEnemiesKilledByFire() {
+        return enemiesKilledByFire;
+    }
+
+    public void setEnemiesKilledByFire(int enemiesKilledByFire) {
+        this.enemiesKilledByFire = enemiesKilledByFire;
+    }
+
+    public int getLastEnemiesKilledByStomp() {
+        return lastEnemiesKilledByStomp;
+    }
+
+    public void setLastEnemiesKilledByStomp(int lastEnemiesKilledByStomp) {
+        this.lastEnemiesKilledByStomp = lastEnemiesKilledByStomp;
+    }
+
+    public int getLastEnemiesKilledByFire() {
+        return lastEnemiesKilledByFire;
+    }
+
+    public void setLastEnemiesKilledByFire(int lastEnemiesKilledByFire) {
+        this.lastEnemiesKilledByFire = lastEnemiesKilledByFire;
+    }
+
+    public int getTotalEnemyCount() {
+        return totalEnemyCount;
+    }
+
+    public void setTotalEnemyCount(int totalEnemyCount) {
+        this.totalEnemyCount = totalEnemyCount;
+    }
+
+    public boolean[] getObstacles() {
+        return obstacles;
+    }
+
+    public void setObstacles(boolean[] obstacles) {
+        this.obstacles = obstacles;
+    }
+
+    public byte[][] getScene() {
+        return scene;
+    }
+
+    public void setScene(byte[][] scene) {
+        this.scene = scene;
+    }
+
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getLastDistance() {
+        return lastDistance;
+    }
+
+    public void setLastDistance(int lastDistance) {
+        this.lastDistance = lastDistance;
+    }
+
+    public int getLastHeight() {
+        return lastHeight;
+    }
+
+    public void setLastHeight(int lastHeight) {
+        this.lastHeight = lastHeight;
+    }
+
     private int direction = 8;
     private float marioX = 0f;
     private float marioY = 0f;
-
     private int stuckCounter = 0;
     private int stuck = 0;
     private int onGround = 1;
     private int canJump = 1;
-
     private int hitCount = 0;
     private int gotHit = 0;
-
     private int time = 0;
-
+    //2-fire 1-big 0-small
+    private int marioMode = 2;
+    //direction 0-8
     //[x][x][x][x][x]
     //[x][x][x][x][x]
     //[x][x][M][x][x]
@@ -68,7 +256,6 @@ public class State {
     public void update(Environment environment) {
         this.environment = environment;
         this.scene = environment.getMergedObservationZZ(1,1);
-
         //Update Distance Delta  // TODO Implement with minValue
         distance = environment.getEvaluationInfo().distancePassedPhys - lastDistance;
         if(distance < Params.DISTANCE_THRESHOLD) {distance = 0;}
@@ -97,10 +284,11 @@ public class State {
         //Stuck??
 
         gotHit = environment.getEvaluationInfo().collisionsWithCreatures - hitCount;
+        System.out.println(gotHit);
         hitCount = environment.getEvaluationInfo().collisionsWithCreatures;
 
         time = environment.getTimeSpent();
-        canJump = environment.isMarioAbleToJump()?1:0;
+        canJump = (!environment.isMarioOnGround()||environment.isMarioAbleToJump())?1:0;
         onGround = environment.isMarioOnGround()?1:0;
 
         //Fill enemy Info
@@ -144,10 +332,10 @@ public class State {
     public float getReward(){
         float reward =  distance * Params.REWARDS.DISTANCE +
                 height * Params.REWARDS.HEIGHT +
+                gotHit * Params.REWARDS.COLLISION;
 
-                stuck * Params.REWARDS.STUCK;
-      //  time * Params.REWARDS.TIME_SPENT +
-               logger.info("D: " + distance + " H:" + height + " R:" +reward);
+             //   stuck * Params.REWARDS.STUCK;
+           //     time * Params.REWARDS.TIME_SPENT;          //     logger.info("D: " + distance + " H:" + height + " R:" +reward);
         return reward;
     }
 
@@ -197,11 +385,11 @@ public class State {
 
         if (canJump != state.canJump) return false;
         if (direction != state.direction) return false;
-        if (distance != state.distance) return false;
         if (gotHit != state.gotHit) return false;
         if (height != state.height) return false;
         if (marioMode != state.marioMode) return false;
         if (onGround != state.onGround) return false;
+        if (stuck != state.stuck) return false;
         if (!Arrays.equals(enemies, state.enemies)) return false;
         if (!Arrays.equals(obstacles, state.obstacles)) return false;
 
@@ -210,14 +398,14 @@ public class State {
 
     @Override
     public int hashCode() {
-        int result = marioMode;
-        result = 31 * result + direction;
+        int result = direction;
+        result = 31 * result + stuck;
         result = 31 * result + onGround;
         result = 31 * result + canJump;
         result = 31 * result + gotHit;
+        result = 31 * result + marioMode;
         result = 31 * result + Arrays.hashCode(enemies);
         result = 31 * result + Arrays.hashCode(obstacles);
-        result = 31 * result + distance;
         result = 31 * result + height;
         return result;
     }

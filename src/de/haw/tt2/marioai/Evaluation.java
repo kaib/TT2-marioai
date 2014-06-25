@@ -63,7 +63,10 @@ public class Evaluation {
         marioAIOptions.setFPS(200);
 
         marioAIOptions.setLevelDifficulty(0);
-
+        marioAIOptions.setFlatLevel(true);
+        marioAIOptions.setBlocksCount(false);
+        marioAIOptions.setTubesCount(false);
+     //   marioAIOptions.setEnemies("0");
        // marioAIOptions.setDeadEndsCount(true);
        // marioAIOptions.setTubesCount(true);
        // marioAIOptions.setBlocksCount(true);
@@ -102,8 +105,8 @@ public class Evaluation {
         evaluationDataList.add(results);
 
         for(int i = 0; i < Params.EVAL_ITERATIONS; i++){
-            marioAIOptions.setLevelRandSeed(i);
-
+            marioAIOptions.setLevelRandSeed(Params.SEED);
+           logger.info("Size: "+ qbot.getqTable().getqTable().size());
             int failedCount = 0;
             while(!basicTask.runSingleEpisode(1)){
                 System.err.println("OUT OF COMPUTATIONAL TIME!!!!");
