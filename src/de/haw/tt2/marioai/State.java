@@ -111,12 +111,12 @@ public class State {
         this.enemiesKilledByStomp = enemiesKilledByStomp;
     }
 
-    public boolean[] getEnemies() {
-        return enemies;
+    public boolean[] getEnemiesSmall() {
+        return this.enemiesSmall;
     }
 
-    public void setEnemies(boolean[] enemies) {
-        this.enemies = enemies;
+    public void setEnemiesSmall(boolean[] enemiesSmall) {
+        this.enemiesSmall = enemiesSmall;
     }
 
     public int getEnemiesKilledByFire() {
@@ -206,7 +206,7 @@ public class State {
     public void setLastHeight(int lastHeight) {
         this.lastHeight = lastHeight;
     }
-
+    //direction 0-8
     private int direction = 8;
     private float marioX = 0f;
     private float marioY = 0f;
@@ -217,15 +217,11 @@ public class State {
     private int hitCount = 0;
     private int gotHit = 0;
     private int time = 0;
+    private int lastTime = 0;
+    private int win = 0;
     //2-fire 1-big 0-small
     private int marioMode = 2;
-    //direction 0-8
-    //[x][x][x][x][x]
-    //[x][x][x][x][x]
-    //[x][x][M][x][x]
-    //[x][x][M][x][x]
-    //[x][x][x][x][x]
-    private boolean[] enemies = new boolean[25];
+    private boolean[] enemiesSmall = new boolean[3]      ;
     //Remote Enemies 2 Fields Away-> this is an area without the direct Enemies Matrix
     //private boolean[] remoteEnemies = new boolean[18];
 
@@ -256,7 +252,10 @@ public class State {
     public void update(Environment environment) {
         this.environment = environment;
         this.scene = environment.getMergedObservationZZ(1,1);
-        //Update Distance Delta  // TODO Implement with minValue
+        if(environment.getEvaluationInfo().distancePassedCells == 256) {
+            win = 1;
+            System.out.println("WON");
+        }
         distance = environment.getEvaluationInfo().distancePassedPhys - lastDistance;
         if(distance < Params.DISTANCE_THRESHOLD) {distance = 0;}
         lastDistance = environment.getEvaluationInfo().distancePassedPhys;
@@ -284,37 +283,13 @@ public class State {
         //Stuck??
 
         gotHit = environment.getEvaluationInfo().collisionsWithCreatures - hitCount;
-        System.out.println(gotHit);
         hitCount = environment.getEvaluationInfo().collisionsWithCreatures;
 
-        time = environment.getTimeSpent();
+        time = environment.getTimeSpent() - lastTime;
+        lastTime = time;
         canJump = (!environment.isMarioOnGround()||environment.isMarioAbleToJump())?1:0;
         onGround = environment.isMarioOnGround()?1:0;
 
-        //Fill enemy Info
-        //Reset and new
-        enemies = new boolean[25];
-        int enemyIndize=0;
-        totalEnemyCount = 0;
-        for(int x = MARIO_X -2; x <= MARIO_X+2;x++){
-            for(int y = MARIO_Y -3; y <= MARIO_Y+1; y++){
-                //  System.out.println("[" + x + ":" +y+"]");
-               if(scene[y][x] == Sprite.KIND_BULLET_BILL ||
-                  scene[y][x] == Sprite.KIND_GOOMBA ||
-                  scene[y][x] == Sprite.KIND_ENEMY_FLOWER ||
-                  scene[y][x] == Sprite.KIND_GOOMBA_WINGED ||
-                  scene[y][x] == Sprite.KIND_GREEN_KOOPA ||
-                  scene[y][x] == Sprite.KIND_GREEN_KOOPA_WINGED ||
-                  scene[y][x] == Sprite.KIND_RED_KOOPA ||
-                  scene[y][x] == Sprite.KIND_RED_KOOPA_WINGED ||
-                  scene[y][x] == Sprite.KIND_SPIKY ||
-                  scene[y][x] == Sprite.KIND_SPIKY_WINGED) {
-                    enemies[enemyIndize] = true;
-                    totalEnemyCount++;
-               }
-               enemyIndize++;
-            }
-        }
         enemiesKilledByStomp = environment.getKillsByStomp();
         enemiesKilledByFire = environment.getKillsByFire();
 
@@ -327,16 +302,36 @@ public class State {
            }
            obstacleIndize++;
        }
+       enemiesSmall[0] = isEnemy(MARIO_X+1,MARIO_Y);
+       enemiesSmall[1] = isEnemy(MARIO_X+2,MARIO_Y);
+       enemiesSmall[2] = isEnemy(MARIO_X+3,MARIO_Y);
+
+    }
+
+    private boolean isEnemy(int x, int y) {
+        return (scene[y][x] == Sprite.KIND_BULLET_BILL ||
+                scene[y][x] == Sprite.KIND_GOOMBA ||
+                scene[y][x] == Sprite.KIND_ENEMY_FLOWER ||
+                scene[y][x] == Sprite.KIND_GOOMBA_WINGED ||
+                scene[y][x] == Sprite.KIND_GREEN_KOOPA ||
+                scene[y][x] == Sprite.KIND_GREEN_KOOPA_WINGED ||
+                scene[y][x] == Sprite.KIND_RED_KOOPA ||
+                scene[y][x] == Sprite.KIND_RED_KOOPA_WINGED ||
+                scene[y][x] == Sprite.KIND_SPIKY ||
+                scene[y][x] == Sprite.KIND_SPIKY_WINGED);
     }
 
     public float getReward(){
         float reward =  distance * Params.REWARDS.DISTANCE +
-                height * Params.REWARDS.HEIGHT +
+               // time * Params.REWARDS.TIME +
+                win * Params.REWARDS.WIN +
                 gotHit * Params.REWARDS.COLLISION;
-
              //   stuck * Params.REWARDS.STUCK;
-           //     time * Params.REWARDS.TIME_SPENT;          //     logger.info("D: " + distance + " H:" + height + " R:" +reward);
-        return reward;
+           //     time * Params.REWARDS.TIME_SPENT;
+        if(environment.getEvaluationInfo().distancePassedCells >= 255){
+
+        };
+           return reward;
     }
 
     //-1 for no ground under Mario
@@ -390,7 +385,7 @@ public class State {
         if (marioMode != state.marioMode) return false;
         if (onGround != state.onGround) return false;
         if (stuck != state.stuck) return false;
-        if (!Arrays.equals(enemies, state.enemies)) return false;
+        if (!Arrays.equals(enemiesSmall, state.enemiesSmall)) return false;
         if (!Arrays.equals(obstacles, state.obstacles)) return false;
 
         return true;
@@ -404,7 +399,7 @@ public class State {
         result = 31 * result + canJump;
         result = 31 * result + gotHit;
         result = 31 * result + marioMode;
-        result = 31 * result + Arrays.hashCode(enemies);
+        result = 31 * result + Arrays.hashCode(enemiesSmall);
         result = 31 * result + Arrays.hashCode(obstacles);
         result = 31 * result + height;
         return result;

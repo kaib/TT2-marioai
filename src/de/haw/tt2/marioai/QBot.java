@@ -70,6 +70,7 @@ public class QBot implements LearningAgent {
         marioAIOptions.setLevelRandSeed(Params.SEED);
         marioAIOptions.setMarioMode(Params.MARIO_MODE);
         for(int i = 0; i < Params.TRAINING_ITERATIONS; i++) {
+
             learnOnce();
         }
         eval();
@@ -85,7 +86,7 @@ public class QBot implements LearningAgent {
         int score = evaluationInfo.computeWeightedFitness();
 
        // logger.info("SCORE: " + score);
-        logger.info("EndLearningTrial: " + learningTrial + " Score: " + score + " QT Size: " + qTable.getqTable().size());
+      //  logger.info("EndLearningTrial: " + learningTrial + " Score: " + score + " QT Size: " + qTable.getqTable().size());
         learningTrial++;
 
     }

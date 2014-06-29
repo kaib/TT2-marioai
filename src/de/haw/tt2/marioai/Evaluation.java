@@ -60,13 +60,14 @@ public class Evaluation {
         marioAIOptions = new MarioAIOptions();
         marioAIOptions.setAgent(qbot);
         marioAIOptions.setVisualization(false);
-        marioAIOptions.setFPS(200);
+        marioAIOptions.setFPS(101);
 
         marioAIOptions.setLevelDifficulty(0);
         marioAIOptions.setFlatLevel(true);
         marioAIOptions.setBlocksCount(false);
         marioAIOptions.setTubesCount(false);
-     //   marioAIOptions.setEnemies("0");
+        marioAIOptions.setEnemies("0");
+
        // marioAIOptions.setDeadEndsCount(true);
        // marioAIOptions.setTubesCount(true);
        // marioAIOptions.setBlocksCount(true);
@@ -81,6 +82,9 @@ public class Evaluation {
     public float evaluate() {
         if (mode == Mode.DEBUG) {
             marioAIOptions.setVisualization(true);
+            marioAIOptions.setReceptiveFieldVisualized(true);
+
+
         }
         logger.info("StartLearningTask");
         qbot.learn();
@@ -106,7 +110,9 @@ public class Evaluation {
 
         for(int i = 0; i < Params.EVAL_ITERATIONS; i++){
             marioAIOptions.setLevelRandSeed(Params.SEED);
-           logger.info("Size: "+ qbot.getqTable().getqTable().size());
+            marioAIOptions.setFPS(50);
+
+         //  logger.info("Size: "+ qbot.getqTable().getqTable().size());
             int failedCount = 0;
             while(!basicTask.runSingleEpisode(1)){
                 System.err.println("OUT OF COMPUTATIONAL TIME!!!!");

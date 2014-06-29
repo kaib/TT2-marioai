@@ -28,13 +28,10 @@
 package ch.idsia.scenarios;
 
 import ch.idsia.agents.Agent;
-import ch.idsia.agents.BasicLearningAgent;
-import ch.idsia.agents.SRNESLearningAgent;
-import ch.idsia.agents.SimpleAgent;
-import ch.idsia.agents.controllers.ForwardAgent;
-import ch.idsia.agents.learning.SRNAgent;
+import ch.idsia.agents.controllers.myAgents.SomeEvolverAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 import ch.idsia.benchmark.tasks.BasicTask;
+import ch.idsia.benchmark.tasks.LearningTask;
 import ch.idsia.tools.MarioAIOptions;
 
 import java.io.IOException;
@@ -49,13 +46,16 @@ import java.io.IOException;
 
 public class Custom
 {
+
+
+
 public static void main(String[] args)
 {
 //final String argsString = "-vis on";
     final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-    final Agent agent = new SRNESLearningAgent();
-  //  marioAIOptions.setAgent(agent);
+    final Agent agent = new SomeEvolverAgent("Agent");
+    marioAIOptions.setAgent(agent);
     marioAIOptions.setVisualization(true);
     marioAIOptions.setReceptiveFieldHeight(22);
     marioAIOptions.setReceptiveFieldWidth(22);
@@ -63,7 +63,7 @@ public static void main(String[] args)
     marioAIOptions.setReceptiveFieldVisualized(true);
     System.out.println(marioAIOptions.isReceptiveFieldVisualized());
     marioAIOptions.setScale2X(true);
-    final BasicTask basicTask = new BasicTask(marioAIOptions);
+    final BasicTask basicTask = new LearningTask(marioAIOptions);
 
     for (int i = 0; i < 10; ++i)
     {

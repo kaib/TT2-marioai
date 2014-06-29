@@ -11,6 +11,7 @@ public class QTable {
     Random random;
     //TODO STATE CODING
     private HashMap<State, float[]> qTable;
+    private HashMap<State,int[]> transitionCount;
 
     private int actionCount;
 
@@ -27,6 +28,7 @@ public class QTable {
         this.actionCount = actionCount;
         this.random = new Random();
         qTable = new HashMap<State, float[]>();
+        transitionCount = new HashMap<State, int[]>();
     }
 
     public int getNextAction(State state){
@@ -80,7 +82,6 @@ public class QTable {
     }
 
     //QValues for State
-    //if State not existed bevore all QValues = 0, TODO TEST RANDOM Q VAlUE APPROACH
     public float[] getQValues(State state){
         if(!qTable.containsKey(state)) {
             float[] initQValues = getInitQValues();
@@ -89,14 +90,15 @@ public class QTable {
         return qTable.get(state);
     }
 
-    //Currently Default QValues are 0
+
     private float[] getInitQValues() {
         float maxF = 0.1f;
         float minF = -0.1f;
 
         float[] result = new float[actionCount];
         for(int i = 0; i < result.length; i++){
-            result[i] = random.nextFloat() * (maxF-minF) +minF;
+            //result[i] = random.nextFloat() * (maxF-minF) +minF;
+            result[i] = 0f;
         }
         return result;
     }

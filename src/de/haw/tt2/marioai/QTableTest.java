@@ -12,7 +12,7 @@ public class QTableTest extends TestCase {
         state1.setHeight(1);
         state1.setMarioMode(1);
         state1.setOnGround(1);
-        state1.setEnemies(new boolean[25]);
+
         state1.setObstacles(new boolean[4]);
         state1.setDistance(1);
         state1.setStuck(1);
@@ -24,7 +24,7 @@ public class QTableTest extends TestCase {
         state2.setHeight(1);
         state2.setMarioMode(1);
         state2.setOnGround(1);
-        state2.setEnemies(new boolean[25]);
+
         state2.setObstacles(new boolean[4]);
         state2.setStuck(1);
 
@@ -35,7 +35,7 @@ public class QTableTest extends TestCase {
         state3.setHeight(1);
         state3.setMarioMode(2);
         state3.setOnGround(1);
-        state3.setEnemies(new boolean[25]);
+
         state3.setObstacles(new boolean[4]);
 
         QTable qTable = new QTable(Params.NUMBER_OF_ACTIONS);
@@ -53,7 +53,7 @@ public class QTableTest extends TestCase {
         assertEquals(2,qTable.getqTable().size());
         qTable.updateQTable(1f,state3);
         assertEquals(3,qTable.getqTable().size());
-        state1.getEnemies()[2] =true;
+
         qTable.updateQTable(1f,state1);
         assertEquals(4,qTable.getqTable().size());
     }

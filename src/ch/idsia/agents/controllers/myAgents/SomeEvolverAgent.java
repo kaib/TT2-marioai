@@ -6,13 +6,14 @@ import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.tasks.LearningTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by dude on 31.05.2014.
  */
 public class SomeEvolverAgent extends BasicMarioAIAgent implements LearningAgent {
-    private ArrayList<SomeEvolverAgent> population = new ArrayList<SomeEvolverAgent>();
-    private SomeEvolverAgent currentAgent;
+    private ArrayList<SarsaAgent> population = new ArrayList<SarsaAgent>();
+    private SarsaAgent currentAgent;
     private int popSize = 100;
     enum State{INIT,EXPLORE,SELECT}
     private State state = State.INIT;
@@ -26,7 +27,7 @@ public class SomeEvolverAgent extends BasicMarioAIAgent implements LearningAgent
 
     @Override
     public void learn() {
-
+        currentAgent = Collections.max(population);
     }
 
     @Override
@@ -56,7 +57,16 @@ public class SomeEvolverAgent extends BasicMarioAIAgent implements LearningAgent
                 currentAgent = population.get(popIndex);
                 break;
             case EXPLORE:
+                SarsaAgent best = Collections.max(population);
+                SarsaAgent newAgent = new SarsaAgent("explored");
+                currentAgent = newAgent;
+                break;
             case SELECT:
+                SarsaAgent worst = Collections.min(population);
+                population.remove(worst);
+                SarsaAgent newAgent1 = new SarsaAgent("selected");
+                currentAgent = newAgent1;
+                break;
         }
 
     }
@@ -79,8 +89,9 @@ public class SomeEvolverAgent extends BasicMarioAIAgent implements LearningAgent
     @Override
     public void init() {
         for(int i = 0; i< popSize; i++)  {
-            SomeEvolverAgent agent = new SomeEvolverAgent("Agent: " + i) ;
-
+            SarsaAgent agent = new SarsaAgent("Agent: " + i) ;
+            agent.setFitness(0);
+            population.add(agent);
         }
 
     }

@@ -69,6 +69,7 @@ public boolean[] getAction()
     int x = marioEgoRow;
     int y = marioEgoCol;
 
+
     action[Mario.KEY_SPEED] = isCreature(enemies[x][y + 2]) || isCreature(enemies[x][y + 1]);
 
     return action;
